@@ -198,7 +198,7 @@ model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
 train_history = model.fit_generator(train_datagen.flow(x_train_normalize, y_train_OneHot,
                                                        batch_size=batch_size), samples_per_epoch = samples_per_epoch,
                                     epochs=maxepoches,
-                                    validation_data=test_datagen, validation_steps = validation_steps, verbose=2)
+                                    validation_data=test_datagen.flow(x_test_normalize, y_test_OneHot,batch_size=batch_size), validation_steps = validation_steps, verbose=2)
 
 
 def show_train_history(train_acc, test_acc):
