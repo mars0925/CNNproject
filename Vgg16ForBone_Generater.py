@@ -31,8 +31,9 @@ epoch = 15  # 訓練幾回合
 learning_rate = 0.1
 lr_decay = 1e-6
 lr_drop = 20
-steps_per_epoch = (x_train.shape[0] *2)// batch_size
+train_steps_per_epoch = (x_train.shape[0] * 2) // batch_size
 samples_per_epoch=(x_train.shape[0] *2)
+validation_steps = (x_test.shape[0] * 1000) // batch_size
 
 # 打亂資料
 index_1 = [i for i in range(len(x_train))]
@@ -169,11 +170,8 @@ try:
 except:
     print("載入模型失敗!開始訓練一個新模型")
 
-# optimization details
-# model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
-
 # data augmentation
-datagen = ImageDataGenerator(
+train_datagen = ImageDataGenerator(
     featurewise_center=False,  # set input mean to 0 over the dataset
     samplewise_center=False,  # set each sample mean to 0
     featurewise_std_normalization=False,  # divide inputs by std of the dataset
@@ -184,8 +182,12 @@ datagen = ImageDataGenerator(
     height_shift_range=0.1,  # randomly shift images vertically (fraction of total height)
     horizontal_flip=True,  # randomly flip images
     vertical_flip=False)  # randomly flip images
+
+test_datagen = ImageDataGenerator()
 # (std, mean, and principal components if ZCA whitening is applied).
-datagen.fit(x_train_normalize)
+
+train_datagen.fit(x_train_normalize)
+test_datagen.fit(x_test_normalize)
 
 # optimization details
 sgd = optimizers.SGD(lr=learning_rate, decay=lr_decay, momentum=0.9, nesterov=True)
@@ -193,10 +195,10 @@ model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
 
 # training process in a for loop with learning rate drop every 25 epoches.
 
-train_history = model.fit_generator(datagen.flow(x_train_normalize, y_train_OneHot,
-                                               batch_size=batch_size),samples_per_epoch = samples_per_epoch,
-                                  epochs=maxepoches,
-                                  validation_data=(x_test_normalize, y_test_OneHot),verbose=1)
+train_history = model.fit_generator(train_datagen.flow(x_train_normalize, y_train_OneHot,
+                                                       batch_size=batch_size), samples_per_epoch = samples_per_epoch,
+                                    epochs=maxepoches,
+                                    validation_data=test_datagen, validation_steps = validation_steps, verbose=2)
 
 
 def show_train_history(train_acc, test_acc):
