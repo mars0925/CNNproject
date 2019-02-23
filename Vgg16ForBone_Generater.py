@@ -31,6 +31,8 @@ epoch = 15  # 訓練幾回合
 learning_rate = 0.1
 lr_decay = 1e-6
 lr_drop = 20
+steps_per_epoch = (x_train.shape[0] *2)// batch_size
+samples_per_epoch=(x_train.shape[0] *2)
 
 # 打亂資料
 index_1 = [i for i in range(len(x_train))]
@@ -192,8 +194,7 @@ model.compile(loss='binary_crossentropy', optimizer=sgd, metrics=['accuracy'])
 # training process in a for loop with learning rate drop every 25 epoches.
 
 train_history = model.fit_generator(datagen.flow(x_train_normalize, y_train_OneHot,
-                                               batch_size=batch_size),
-                                  steps_per_epoch=x_train.shape[0] // batch_size,
+                                               batch_size=batch_size),samples_per_epoch = samples_per_epoch,
                                   epochs=maxepoches,
                                   validation_data=(x_test_normalize, y_test_OneHot),verbose=1)
 

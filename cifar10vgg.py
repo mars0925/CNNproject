@@ -15,9 +15,9 @@ from keras import regularizers
 
 class cifar10vgg:
     def __init__(self,train=True):
-        self.num_classes = 10
+        self.num_classes = 2
         self.weight_decay = 0.0005
-        self.x_shape = [32,32,3]
+        self.x_shape = [256, 256, 3]
 
         self.model = self.build_model()
         if train:
@@ -146,8 +146,8 @@ class cifar10vgg:
     def train(self,model):
 
         #training parameters
-        batch_size = 128
-        maxepoches = 250
+        batch_size = 8
+        maxepoches = 25
         learning_rate = 0.1
         lr_decay = 1e-6
         lr_drop = 20
@@ -184,7 +184,7 @@ class cifar10vgg:
 
         #optimization details
         sgd = optimizers.SGD(lr=learning_rate, decay=lr_decay, momentum=0.9, nesterov=True)
-        model.compile(loss='categorical_crossentropy', optimizer=sgd,metrics=['accuracy'])
+        model.compile(loss='binary_crossentropy', optimizer=sgd,metrics=['accuracy'])
 
 
         # training process in a for loop with learning rate drop every 25 epoches.
@@ -193,7 +193,7 @@ class cifar10vgg:
                                          batch_size=batch_size),
                             steps_per_epoch=x_train.shape[0] // batch_size,
                             epochs=maxepoches,
-                            validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=2)
+                            validation_data=(x_test, y_test),callbacks=[reduce_lr],verbose=2,class_weight='auto')
         model.save_weights('cifar10vgg.h5')
         return model
 

@@ -17,7 +17,7 @@ num_class = 2#圖像類別
 RGB = 3  # 彩色
 pixel = x_train.shape[1]  # 圖片的像素
 batch_size = 8 #一次使用幾張圖片
-epoch = 3 #訓練幾回合
+epoch = 15 #訓練幾回合
 
 
 # 打亂資料
@@ -54,40 +54,45 @@ model.add(Conv2D(filters=64, kernel_size=(3, 3),
                  input_shape=(pixel, pixel, RGB),
                  activation='relu', padding='same'))
 model.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(BatchNormalization())
 model.add(Dropout(0.5))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 
 #block2
 model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(128, (3, 3), activation='relu', padding='same'))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(Dropout(0.5))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 
 #block3
 model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(256, (3, 3), activation='relu', padding='same'))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(Dropout(0.5))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 
 #block4
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)), )
 model.add(Dropout(0.5))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 
 #block5
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(Conv2D(512, (3, 3), activation='relu', padding='same'))
 model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
 model.add(Dropout(0.5))
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
 
 #全連接層
 model.add(Flatten())  # 扁平化 平坦層
@@ -110,7 +115,7 @@ except:
     
 
 model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
-train_history = model.fit(x_train_normalize, y_train_OneHot, batch_size=batch_size, epochs=epoch, validation_split=0.2,verbose=1)
+train_history = model.fit(x_train_normalize, y_train_OneHot, batch_size=batch_size, epochs=epoch, validation_split=0.2,verbose=1,class_weight='auto')
 
 def show_train_history(train_acc, test_acc):
     plt.plot(train_history.history[train_acc])
