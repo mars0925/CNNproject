@@ -1,13 +1,14 @@
 
 from __future__ import print_function
 import keras
-from keras.datasets import cifar10
+# from keras.datasets import cifar10
 from keras.preprocessing.image import ImageDataGenerator
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Activation, Flatten
 from keras.layers import Conv2D, MaxPooling2D, BatchNormalization
 from keras import optimizers
 import numpy as np
+from LoadData import load_data
 from keras.layers.core import Lambda
 from keras import backend as K
 from keras import regularizers
@@ -151,7 +152,8 @@ class cifar10vgg:
         lr_decay = 1e-6
         lr_drop = 20
         # The data, shuffled and split between train and test sets:
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        # (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        (x_train, y_train), (x_test, y_test) = load_data()
         x_train = x_train.astype('float32')
         x_test = x_test.astype('float32')
         x_train, x_test = self.normalize(x_train, x_test)
@@ -198,7 +200,8 @@ class cifar10vgg:
 if __name__ == '__main__':
 
 
-    (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+    # (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+    (x_train, y_train), (x_test, y_test) = load_data()
     x_train = x_train.astype('float32')
     x_test = x_test.astype('float32')
 
