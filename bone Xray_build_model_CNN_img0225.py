@@ -1,4 +1,5 @@
 # coding: utf-8
+#使用自訂的模式
 
 from LoadData import load_data
 import numpy as np
