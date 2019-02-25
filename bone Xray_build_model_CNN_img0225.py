@@ -4,19 +4,13 @@ from LoadData import load_data
 import numpy as np
 import random
 
-
+np.random.seed(10)
+num_class = 2
+RGB = 3  # 彩色
 
 # Step 1. 資料準備
 
 (x_train, y_train), (x_test, y_test) = load_data()
-np.random.seed(10)
-num_class = 2
-RGB = 3  # 彩色
-batch_size = 8
-steps_per_epoch = (x_train.shape[0]*10)//batch_size #它通常應等於訓練資料的樣本數除以batch_size
-epochs = 5
-validation_steps = (x_test.shape[0]*10)//batch_size #測試資料集樣本個數除以batch_size
-
 
 # x_train = x_train.transpose(0, 2, 3, 1)
 # x_test = x_test.transpose(0, 2, 3, 1)
@@ -66,7 +60,7 @@ model.add(Conv2D(filters=32, kernel_size=(3, 3),
                  activation='relu',
                  padding='same'))
 
-model.add(Dropout(rate=0.25))
+model.add(Dropout(rate=0.5))
 
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
@@ -75,21 +69,30 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Conv2D(filters=64, kernel_size=(3, 3),
                  activation='relu', padding='same'))
 
-model.add(Dropout(0.25))
+model.add(Dropout(0.5))
+
+model.add(MaxPooling2D(pool_size=(2, 2)))
+
+# 卷積層3與池化層3
+
+model.add(Conv2D(filters=64, kernel_size=(3, 3),
+                 activation='relu', padding='same'))
+
+model.add(Dropout(0.5))
 
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3. 建立神經網路(平坦層、隱藏層、輸出層)
 
 model.add(Flatten())#扁平化 平坦層
-model.add(Dropout(rate=0.3))
+model.add(Dropout(rate=0.5))
 
 model.add(Dense(128, activation='relu'))#隱藏層
 model.add(Dropout(rate=0.4))
 model.add(Dense(256, activation='relu'))#隱藏層
 model.add(Dropout(0.5))
 
-model.add(Dense(num_class, activation='softmax'))  # 輸出層 有幾個類別 num_class
+model.add(Dense(num_class, activation='sigmoid'))  # 輸出層 有幾個類別 num_class
 
 print(model.summary())
 
@@ -105,15 +108,10 @@ except:
 
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-from keras.preprocessing.image import ImageDataGenerator
+train_history = model.fit(x_train_normalize, y_train_OneHot,
+                          validation_split=0.2,
+                          epochs=15, batch_size=8, class_weight = 'auto',verbose=1)
 
-train_datagen = ImageDataGenerator(rescale = 1./255,shear_range = 0.2, zoom_range = 0.2,horizontal_flip = True)
-test_datagen = ImageDataGenerator(rescale = 1./255)#測試集只需要特徵縮放處理即可
-
-train_set = train_datagen.flow(x_train_normalize,y_train_OneHot,batch_size=batch_size)
-test_set = train_datagen.flow(x_test_normalize,y_test_OneHot,batch_size=batch_size)
-
-train_history = model.fit_generator(train_set,steps_per_epoch = steps_per_epoch,validation_data = test_set, validation_steps = validation_steps )
 
 def show_train_history(train_acc, test_acc):
     plt.plot(train_history.history[train_acc])
@@ -131,13 +129,13 @@ show_train_history('loss', 'val_loss')
 
 # =====#
 # Step 6. 評估模型準確率
-scores = model.evaluate(x_test_normalize, y_test_OneHot,batch_size= batch_size)
+scores = model.evaluate(x_test_normalize, y_test_OneHot)
 print("Loss:", scores[0], "accuracy", scores[1])
 
 
 # 進行預測
 # 利用訓練好的模型,用測試資料來預測他的類別
-prediction = model.predict_classes(x_test_normalize,batch_size=8)
+prediction = model.predict_classes(x_test_normalize)
 prediction[:num_class]  # 類別數目
 
 # 查看預測結果
@@ -168,7 +166,7 @@ plot_images_labels_prediction(x_test_normalize, y_test, prediction, 0, pixel, nu
 
 # 查看預測機率
 
-Predicted_Probability = model.predict(x_test_normalize,batch_size=batch_size)
+Predicted_Probability = model.predict(x_test_normalize)
 
 
 def show_Predicted_Probability(y, prediction, x_img, Predicted_Probability, i, pixel, RGB):
