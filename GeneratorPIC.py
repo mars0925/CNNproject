@@ -1,7 +1,9 @@
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+from PIL import Image
+from envs.labelme.Lib import os
+from keras.preprocessing.image import ImageDataGenerator,  img_to_array, load_img
 
-orginalDir = r"E:\MarsDemo\imageData\testpic\\"
-putputlDir = r"E:\MarsDemo\CNNproject\pic\\"
+orginalDir = r"D:\AI\imageData\test\\"
+outputlDir = r"D:\AI\imageData\output\\"
 
 
 imgs_orginal = os.listdir(orginalDir)  # 列出檔案夾內所有檔案名稱
@@ -29,7 +31,7 @@ for fileName in imgs_orginal:
     # and saves the results to the `preview/` directory
     i = 0
     for batch in datagen.flow(x, batch_size=1,
-                              save_to_dir = putputlDir, save_prefix='bone', save_format='jpeg'):
+                              save_to_dir = outputlDir, save_prefix='bone', save_format='jpeg'):
         i += 1
         if i > count:
             break  # otherwise the generator would loop indefinitely
