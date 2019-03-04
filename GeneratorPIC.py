@@ -2,20 +2,20 @@ import os
 from PIL import Image
 from keras.preprocessing.image import ImageDataGenerator,  img_to_array, load_img
 
-orginalDir = r"E:\MarsDemo\VGG16\test_set\test_all\\"
-outputlDir = r"E:\MarsDemo\VGG16\test_set\output\\"
+orginalDir = r"E:\MarsDemo\imageData\original\trainset\abnormal\\"
+outputlDir = r"E:\MarsDemo\imageData\testsetGE\abnormal\\"
 
 
 imgs_orginal = os.listdir(orginalDir)  # 列出檔案夾內所有檔案名稱
 firstImage = Image.open(orginalDir + imgs_orginal[0])  # 開啟第一張圖片
 pixel = firstImage.size[0]  # 照片尺寸大小
-count = 10#1張照片要變成幾張
+count =15 #1張照片要變成幾張
 
 
 datagen = ImageDataGenerator(
         rotation_range=20,
         width_shift_range=0.2,
-        zoom_range=0.1,
+        zoom_range=0.3,
         horizontal_flip=True,
         fill_mode='nearest')
 
@@ -39,4 +39,4 @@ for fileName in imgs_orginal:
             break  # otherwise the generator would loop indefinitely
             
 
-print("Saved model to disk")
+print("結束")

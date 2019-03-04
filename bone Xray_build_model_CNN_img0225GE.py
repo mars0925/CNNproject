@@ -5,11 +5,16 @@ import numpy as np
 np.random.seed(10)
 num_class = 1
 RGB = 3  # 彩色
-batchSize = 8
+batchSize = 64
+trainSize = 2000
+testSize = 800
 pixel = 256# 圖片的像素
 
-trainSize = 2636
-testSize = 100
+train_step_for_epoch = int(trainSize/batchSize)
+test_step_for_epoch = int(testSize/batchSize)
+
+
+
 
 # Step 2. 建立模型
 
@@ -77,7 +82,7 @@ except:
 # Step 4. 訓練模型
         
 model.compile(loss='binary_crossentropy',
-              optimizer='rmsprop',
+              optimizer='adam',
               metrics=['accuracy'])
 
 
@@ -96,25 +101,24 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 # subfolers of 'data/train', and indefinitely generate
 # batches of augmented image data
 train_generator = train_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\trainGE\\",  # this is the target directory
+        r"E:\MarsDemo\imageData\animal\training_set\\",  # this is the target directory
         target_size=(pixel, pixel),  # all images will be resized to 150x150
         batch_size=batchSize,
         class_mode='binary')  # since we use binary_crossentropy loss, we need binary labels
 
 # this is a similar generator, for validation data
 validation_generator = test_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\testGE\\",
+        r"E:\MarsDemo\imageData\animal\test_set\\",
         target_size=(pixel, pixel),
         batch_size=batchSize,
         class_mode='binary')
 
 
-model.fit_generator(
-        train_generator,
-        samples_per_epoch=trainSize*10,
-        nb_epoch=5,
-        validation_data=validation_generator,
-        nb_val_samples=testSize*10)        
+model.fit_generator(train_generator,
+                    steps_per_epoch=train_step_for_epoch,
+                    epochs=30,
+                    validation_data=validation_generator,
+                    validation_steps=test_step_for_epoch)        
 
 
 model.save_weights("./cifarCnnModel.h5")

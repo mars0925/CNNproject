@@ -8,6 +8,7 @@ import random
 np.random.seed(10)
 num_class = 2
 RGB = 3  # 彩色
+batchSize = 8
 
 # Step 1. 資料準備
 
@@ -111,7 +112,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 train_history = model.fit(x_train_normalize, y_train_OneHot,
                           validation_split=0.2,
-                          epochs=15, batch_size=8, verbose=1)
+                          epochs=15, batch_size=batchSize, verbose=1)
 
 
 def show_train_history(train_acc, test_acc):
