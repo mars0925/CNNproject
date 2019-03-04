@@ -6,24 +6,21 @@ from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout, Activati
 from keras.layers.normalization import BatchNormalization
 from keras_preprocessing.image import ImageDataGenerator
 
-from LoadData import load_data
 
 # Step 1. 資料準備
-(x_train, y_train), (x_test, y_test) = load_data()
-x_train = x_train.astype('float32')
-x_test = x_test.astype('float32')
+
 
 # 設定參數
-trainSize = 2636
+trainSize = 21560
 testSize = 100
 num_class = 1  # 圖像類別
 RGB = 3  # 彩色
-pixel = x_train.shape[1]  # 圖片的像素
+pixel = 256  # 圖片的像素
 weight_decay = 0.0005
 x_shape = [256, 256, 3]
 learning_rate = 0.1
 batchSize = 8
-epoch = 5  # 訓練幾回合
+epoch = 15  # 訓練幾回合
 learning_rate = 0.1
 lr_decay = 1e-6
 lr_drop = 20
@@ -144,14 +141,14 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 # subfolers of 'data/train', and indefinitely generate
 # batches of augmented image data
 train_generator = train_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\trainGE\\",  # this is the target directory
+        r"E:\MarsDemo\VGG16\train_set\\",  # this is the target directory
         target_size=(pixel, pixel),  # all images will be resized to 150x150
         batch_size=batchSize,
         class_mode='binary')  # since we use binary_crossentropy loss, we need binary labels
 
 # this is a similar generator, for validation data
 validation_generator = test_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\testGE\\",
+        r"E:\MarsDemo\VGG16\test_set\\",
         target_size=(pixel, pixel),
         batch_size=batchSize,
         class_mode='binary')
@@ -159,10 +156,10 @@ validation_generator = test_datagen.flow_from_directory(
 
 model.fit_generator(
         train_generator,
-        samples_per_epoch=trainSize*10,
+        samples_per_epoch=trainSize,
         nb_epoch=epoch,
         validation_data=validation_generator,
-        nb_val_samples=testSize*10)
+        nb_val_samples=testSize)
 
 
 model.save_weights("./cifarCnnModel.h5")

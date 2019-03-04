@@ -1,13 +1,15 @@
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+import os
+from PIL import Image
+from keras.preprocessing.image import ImageDataGenerator,  img_to_array, load_img
 
-orginalDir = r"E:\MarsDemo\imageData\testpic\\"
-putputlDir = r"E:\MarsDemo\CNNproject\pic\\"
+orginalDir = r"E:\MarsDemo\VGG16\test_set\test_all\\"
+outputlDir = r"E:\MarsDemo\VGG16\test_set\output\\"
 
 
 imgs_orginal = os.listdir(orginalDir)  # 列出檔案夾內所有檔案名稱
 firstImage = Image.open(orginalDir + imgs_orginal[0])  # 開啟第一張圖片
 pixel = firstImage.size[0]  # 照片尺寸大小
-count = 20
+count = 10#1張照片要變成幾張
 
 
 datagen = ImageDataGenerator(
@@ -18,7 +20,9 @@ datagen = ImageDataGenerator(
         fill_mode='nearest')
 
 for fileName in imgs_orginal:
-    img_path = imgs_orginal + fileName  # 完整路徑名稱
+   
+    
+    img_path = orginalDir + fileName  # 完整路徑名稱
     #看圖片重製的結果
     img = load_img(img_path)  # 載入圖片
     #img = load_img('data/train/cats/cat.0.jpg')  # this is a PIL image
@@ -28,10 +32,10 @@ for fileName in imgs_orginal:
     # the .flow() command below generates batches of randomly transformed images
     # and saves the results to the `preview/` directory
     i = 0
-    for batch in datagen.flow(x, batch_size=1,
-                              save_to_dir = putputlDir, save_prefix='bone', save_format='jpeg'):
+    for batch in datagen.flow(x, batch_size=1,seed=100000,
+                              save_to_dir = outputlDir, save_prefix=fileName, save_format='jpeg'):
         i += 1
-        if i > count:
+        if i >= count:
             break  # otherwise the generator would loop indefinitely
             
 

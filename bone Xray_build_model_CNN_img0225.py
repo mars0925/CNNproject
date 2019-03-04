@@ -93,7 +93,7 @@ model.add(Dropout(rate=0.4))
 model.add(Dense(256, activation='relu'))#隱藏層
 model.add(Dropout(0.5))
 
-model.add(Dense(num_class, activation='sigmoid'))  # 輸出層 有幾個類別 num_class
+model.add(Dense(num_class, activation='softmax'))  # 輸出層 有幾個類別 num_class
 
 print(model.summary())
 
@@ -111,7 +111,7 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 train_history = model.fit(x_train_normalize, y_train_OneHot,
                           validation_split=0.2,
-                          epochs=15, batch_size=8, class_weight = 'auto',verbose=1)
+                          epochs=15, batch_size=8, verbose=1)
 
 
 def show_train_history(train_acc, test_acc):

@@ -1,9 +1,9 @@
 from PIL import Image
 import os
 
-srcpath = r"D:\AI\imageData\bone_xray\異常"  # 目標資料夾
-targetpath = r"D:\AI\imageData\bone_xray\異常256"  # 成功資料夾
-size = 256
+srcpath = r"E:\MarsDemo\VGG16\test_set\test_all"  # 目標資料夾
+targetpath = r"E:\MarsDemo\VGG16\test_set\test_all128"  # 成功資料夾
+size = 128
 
 filelist = os.listdir(srcpath)
 for file in filelist:

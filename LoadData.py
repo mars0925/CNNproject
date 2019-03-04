@@ -6,8 +6,8 @@ from PIL import Image
 #trainPath = r"E:\MarsDemo\CNNfor Cifar10\imageData\train\\"
 #testPath = r"E:\MarsDemo\CNNfor Cifar10\imageData\test\\"
 
-trainPath = r"E:\MarsDemo\imageData\train256\\"
-testPath = r"E:\MarsDemo\imageData\test256\\"
+trainPath = r"E:\MarsDemo\VGG16\train_set\train_all128\\"
+testPath = r"E:\MarsDemo\VGG16\test_set\test_all128\\"
 
 
 
