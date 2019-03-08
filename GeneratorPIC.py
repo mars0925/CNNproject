@@ -6,6 +6,7 @@ orginalDir = r"E:\MarsDemo\imageData\original\trainset\abnormal\\"
 outputlDir = r"E:\MarsDemo\imageData\testsetGE\abnormal\\"
 
 
+
 imgs_orginal = os.listdir(orginalDir)  # 列出檔案夾內所有檔案名稱
 firstImage = Image.open(orginalDir + imgs_orginal[0])  # 開啟第一張圖片
 pixel = firstImage.size[0]  # 照片尺寸大小
