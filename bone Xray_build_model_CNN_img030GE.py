@@ -1,6 +1,7 @@
 # coding: utf-8
 #使用自訂的模式 利用ImageDataGenerator
 import numpy as np
+from random import randint
 
 np.random.seed(10)
 num_class = 1
@@ -85,6 +86,15 @@ model.compile(loss='binary_crossentropy',
               optimizer='adam',
               metrics=['accuracy'])
 
+# 打亂載入batch的順序
+def generate_batch_data_random(x, y, batch_size):
+    """逐步提取batch数据到显存，降低对显存的占用"""
+    ylen = len(y)
+    loopcount = ylen // batch_size
+    while (True):
+        i = randint(0,loopcount)
+        yield x[i * batch_size:(i + 1) * batch_size], y[i * batch_size:(i + 1) * batch_size]
+
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
@@ -103,23 +113,18 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 train_generator = train_datagen.flow_from_directory(
         r"E:\MarsDemo\imageData\animal\training_set\\",  # this is the target directory
         target_size=(pixel, pixel),  # all images will be resized to 150x150
-        batch_size=batchSize,seed=10,
+        batch_size=batchSize,
         class_mode='binary')  # since we use binary_crossentropy loss, we need binary labels
 
 # this is a similar generator, for validation data
 validation_generator = test_datagen.flow_from_directory(
         r"E:\MarsDemo\imageData\animal\test_set\\",
         target_size=(pixel, pixel),
-        batch_size=batchSize,seed=10,
+        batch_size=batchSize,
         class_mode='binary')
 
 
-model.fit_generator(train_generator,
-                    steps_per_epoch=train_step_for_epoch,
-                    epochs=30,
-                    validation_data=validation_generator,
-                    validation_steps=test_step_for_epoch                
-                    )        
+model.fit_generator(train_generator,steps_per_epoch=train_step_for_epoch,epochs=15)        
 
 
 model.save_weights("./cifarCnnModel.h5")

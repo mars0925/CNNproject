@@ -5,10 +5,11 @@ import numpy as np
 np.random.seed(10)
 num_class = 1
 RGB = 3  # 彩色
-batchSize = 64
-trainSize = 2000
-testSize = 800
+batchSize = 16
+trainSize = 37800
+testSize = 3800
 pixel = 256# 圖片的像素
+epochs = 15
 
 train_step_for_epoch = int(trainSize/batchSize)
 test_step_for_epoch = int(testSize/batchSize)
@@ -64,7 +65,7 @@ model.add(Dropout(rate=0.3))
 
 model.add(Dense(128, activation='relu'))#隱藏層
 model.add(Dropout(rate=0.4))
-model.add(Dense(256, activation='relu'))#隱藏層
+model.add(Dense(128, activation='relu'))#隱藏層
 model.add(Dropout(0.5))
 
 model.add(Dense(num_class, activation='sigmoid'))  # 輸出層 有幾個類別 num_class
@@ -93,6 +94,7 @@ train_datagen = ImageDataGenerator(
         zoom_range=0.2,
         horizontal_flip=True)
 
+
 # this is the augmentation configuration we will use for testing:
 # only rescaling
 test_datagen = ImageDataGenerator(rescale=1./255)
@@ -101,25 +103,28 @@ test_datagen = ImageDataGenerator(rescale=1./255)
 # subfolers of 'data/train', and indefinitely generate
 # batches of augmented image data
 train_generator = train_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\animal\training_set\\",  # this is the target directory
+        r"E:\MarsDemo\imageData\7000張去字\imageGenerater\train",  # this is the target directory
         target_size=(pixel, pixel),  # all images will be resized to 150x150
-        batch_size=batchSize,seed=10,
+        batch_size=batchSize,
+        shuffle=True,
+        seed=42,
         class_mode='binary')  # since we use binary_crossentropy loss, we need binary labels
 
 # this is a similar generator, for validation data
 validation_generator = test_datagen.flow_from_directory(
-        r"E:\MarsDemo\imageData\animal\test_set\\",
+        r"E:\MarsDemo\imageData\7000張去字\imageGenerater\valid",
         target_size=(pixel, pixel),
-        batch_size=batchSize,seed=10,
+        batch_size=batchSize,
+        shuffle=True,
+        seed=42,
         class_mode='binary')
 
 
 model.fit_generator(train_generator,
                     steps_per_epoch=train_step_for_epoch,
-                    epochs=30,
+                    epochs=epochs,
                     validation_data=validation_generator,
-                    validation_steps=test_step_for_epoch                
-                    )        
+                    validation_steps=test_step_for_epoch)        
 
 
 model.save_weights("./cifarCnnModel.h5")
