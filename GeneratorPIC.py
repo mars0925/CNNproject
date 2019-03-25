@@ -2,22 +2,22 @@ import os
 from PIL import Image
 from keras.preprocessing.image import ImageDataGenerator,  img_to_array, load_img
 
-orginalDir = r"E:\MarsDemo\imageData\7000張去字\original\train\normal\\"
-outputlDir = r"E:\MarsDemo\imageData\7000張去字\imageGenerater\normal\\"
+orginalDir = r"E:\MarsDemo\imageData\7000張去字\original_abnormal\\"
+outputlDir = r"E:\MarsDemo\imageData\7000張去字\abnormal_GE\\"
 
 
 
 imgs_orginal = os.listdir(orginalDir)  # 列出檔案夾內所有檔案名稱
 firstImage = Image.open(orginalDir + imgs_orginal[0])  # 開啟第一張圖片
 pixel = firstImage.size[0]  # 照片尺寸大小
-count =4 #1張照片要變成幾張
+count =15 #1張照片要變成幾張
 
 
 datagen = ImageDataGenerator(
         rotation_range=5,
-        width_shift_range=0.1,
+        width_shift_range=0.2,
         zoom_range=0.1,
-        horizontal_flip=True,
+#        horizontal_flip=True,
         fill_mode='nearest')
 
 for fileName in imgs_orginal:

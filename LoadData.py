@@ -6,10 +6,27 @@ from PIL import Image
 #trainPath = r"E:\MarsDemo\CNNfor Cifar10\imageData\train\\"
 #testPath = r"E:\MarsDemo\CNNfor Cifar10\imageData\test\\"
 
-trainPath = r"E:\MarsDemo\imageData\trainData\\"
-testPath = r"E:\MarsDemo\imageData\testData\\"
+#訓練70% 預測65%
+#trainPath = r"E:\MarsDemo\imageData\old\train256\\"
+#testPath = r"E:\MarsDemo\imageData\old\test256\\"
 
 
+#trainPath = r"E:\MarsDemo\VGG16\train_set\train_all128\\"
+#testPath = r"E:\MarsDemo\VGG16\test_set\test_all128\\"
+
+
+#訓練90% 預測50%
+#trainPath = r"E:\MarsDemo\imageData\7000張去字\all_256\train\\"
+#testPath = r"E:\MarsDemo\imageData\7000張去字\all_256\predict\\"
+
+#trainPath = r"E:\MarsDemo\imageData\7000張去字\train\\"
+#testPath = r"E:\MarsDemo\imageData\7000張去字\predict\\"
+
+#trainPath = r"E:\MarsDemo\imageData\7000張去字\train\\"
+#testPath = r"E:\MarsDemo\imageData\7000張去字\predict\\"
+
+trainPath = r"E:\MarsDemo\imageData\7000張去字\train_GE\\"
+testPath = r"E:\MarsDemo\imageData\7000張去字\predict\\"
 
 images = []
 labels = []
@@ -30,7 +47,7 @@ def load_data():
         images.append(img_array)  # 放入list
 
         # label = int(fileName.split('.')[0])#從檔名切出標籤
-        label = fileName.split('.')[0]
+        label = fileName[0]
         if label == "N":
             label = 0
         else:
@@ -55,7 +72,7 @@ def load_data():
         images.append(img_array)  # 放入list
 
         # label = int(fileName.split('.')[0])#從檔名切出標籤
-        label = fileName.split('.')[0]
+        label = fileName[0]
         if label == "N":
             label = 0
         else:

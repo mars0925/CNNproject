@@ -57,7 +57,7 @@ model = Sequential()  #初始化
 
 # 卷積層1與池化層1
 
-model.add(Conv2D(filters=32, kernel_size=(3, 3),
+model.add(Conv2D(filters=32, kernel_size=(2, 2),
                  input_shape=(pixel, pixel, RGB),
                  activation='relu',
                  padding='same'))
@@ -68,7 +68,7 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # 卷積層2與池化層2
 
-model.add(Conv2D(filters=64, kernel_size=(3, 3),
+model.add(Conv2D(filters=64, kernel_size=(2, 2),
                  activation='relu', padding='same'))
 
 model.add(Dropout(0.5))
@@ -77,12 +77,12 @@ model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # 卷積層3與池化層3
 
-model.add(Conv2D(filters=64, kernel_size=(3, 3),
-                 activation='relu', padding='same'))
-
-model.add(Dropout(0.5))
-
-model.add(MaxPooling2D(pool_size=(2, 2)))
+#model.add(Conv2D(filters=64, kernel_size=(3, 3),
+#                 activation='relu', padding='same'))
+#
+#model.add(Dropout(0.5))
+#
+#model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3. 建立神經網路(平坦層、隱藏層、輸出層)
 
@@ -94,7 +94,7 @@ model.add(Dropout(rate=0.4))
 model.add(Dense(256, activation='relu'))#隱藏層
 model.add(Dropout(0.5))
 
-model.add(Dense(num_class, activation='softmax'))  # 輸出層 有幾個類別 num_class
+model.add(Dense(num_class, activation='sigmoid'))  # 輸出層 有幾個類別 num_class
 
 print(model.summary())
 

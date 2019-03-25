@@ -1,8 +1,8 @@
 from PIL import Image
 import os
 
-srcpath = r"E:\MarsDemo\imageData\秀OK"  # 目標資料夾
-targetpath = r"E:\MarsDemo\imageData\newPic"  # 成功資料夾
+srcpath = r"E:\MarsDemo\imageData\7000張去字\all_1400"  # 目標資料夾
+targetpath = r"E:\MarsDemo\imageData\7000張去字\all_256"  # 成功資料夾
 size = 256
 
 filelist = os.listdir(srcpath)

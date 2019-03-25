@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 inputPath = r'E:\MarsDemo\imageData\7000張去字\all\\'
-outoutPath = r'E:\MarsDemo\imageData\7000張去字\allOutput\\'
+outoutPath = r'E:\MarsDemo\imageData\7000張去字\all_1400\\'
 
 for name in os.listdir(inputPath):
     im = Image.open(inputPath + name)
@@ -17,8 +17,8 @@ for name in os.listdir(inputPath):
     # 擷取圖片中一塊寬和高都是250的
     x = 0 #起點
     y = 0 #起點
-    xw = 1500 #取的大小
-    yh = 1500 #取的大小
+    xw = 1400 #取的大小
+    yh = 1400 #取的大小
     region = im.crop((x, y, xw, yh))
     region.save(outoutPath + name)
     
